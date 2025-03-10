@@ -19,7 +19,13 @@ export default function TimerPage() {
         { id: 10, hour: 15, minute: 40, label: "５限目終わり" },
         { id: 11, hour: 15, minute: 50, label: "６限目開始" },
         { id: 12, hour: 16, minute: 40, label: "６限目終わり" },
-        { id: 12, hour: 17, minute: 6, label: "実験中" },
+        {
+            id: 12,
+            hour: 20,
+            minute: 10,
+            label: "自習時間終了5分前",
+            soundUrl: "https://github.com/Syo-M/studio02base/raw/main/bgm/hotaru_piano_10.mp3",
+        },
         // 最大20個まで追加可能
     ];
 
@@ -61,21 +67,31 @@ export default function TimerPage() {
             <section className={Styles.chimeContainer}>
                 <MultiSoundTimer
                     timerSettings={sannomiyaNomal}
-                    soundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
+                    defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
                     autoStart={false}
                 />
 
                 <MultiSoundTimer
                     timerSettings={sannomiyaSlide}
-                    soundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
+                    defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
                     autoStart={false}
                 />
 
                 <MultiSoundTimer
                     timerSettings={hiroshima302}
-                    soundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
+                    defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
                     autoStart={false}
                 />
+
+                {/* <MultiSoundTimer
+                    timerSettings={[
+                        { id: 1, hour: 9, minute: 0, label: "朝のミーティング", soundUrl: "/sounds/chime1.mp3" },
+                        { id: 2, hour: 12, minute: 0, label: "昼休み", soundUrl: "/sounds/chime2.mp3" },
+                        { id: 3, hour: 17, minute: 30, label: "終業時間" }, // デフォルト音源を使用
+                    ]}
+                    defaultSoundUrl="/sounds/default-alarm.mp3"
+                    autoStart={true}
+                /> */}
             </section>
         </>
     );

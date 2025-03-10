@@ -2,6 +2,10 @@
     flex-basis: 45%;
 }
 
+.timer-triggered {
+    color: var(--activeColor);
+}
+
 .timerButton {
     background-color: var(--buttonBackground);
     color: var(--textColorWhite);

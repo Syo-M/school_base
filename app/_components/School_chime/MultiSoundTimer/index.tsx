@@ -3,30 +3,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./index.module.css";
 
-// タイマー設定の型定義
+// タイマー設定の型定義を拡張して音源情報を追加
 export interface TimerSetting {
     id: string | number; // 一意のID
     hour: number; // 時 (0-23)
     minute: number; // 分 (0-59)
     label?: string; // オプションのラベル
+    soundUrl?: string; // 個別のサウンドURL（オプション）
 }
 
 // コンポーネントのProps型定義
 interface MultiSoundTimerProps {
     timerSettings: TimerSetting[]; // 時間設定の配列
-    soundUrl?: string; // カスタムサウンドURL（オプション）
+    defaultSoundUrl?: string; // デフォルトサウンドURL（個別設定がない場合に使用）
     autoStart?: boolean; // 自動開始するかどうか（デフォルトfalse）
 }
 
 export default function MultiSoundTimer({
     timerSettings = [],
-    soundUrl = "https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3", // デフォルトサウンドを変更
+    defaultSoundUrl = "https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3", // デフォルトサウンド
     autoStart = false,
 }: MultiSoundTimerProps): React.ReactElement {
     // 状態管理
     const [isRunning, setIsRunning] = useState<boolean>(autoStart);
     const [triggeredTimers, setTriggeredTimers] = useState<Set<string | number>>(new Set());
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    // 複数の音源を管理するためのオブジェクト
+    const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
 
     // 現在時刻を取得する関数（内部計算用）
     const getCurrentTime = (): { hours: number; minutes: number; seconds: number } => {
@@ -40,13 +43,43 @@ export default function MultiSoundTimer({
 
     // タイマー発火時のハンドラー
     const handleTimerTriggered = (timer: TimerSetting) => {
-        console.log(`${timer.label}の時間です！`);
+        console.log(`${timer.label || "アラーム"}の時間です！`);
+
+        // 使用する音源URLの決定（個別設定 or デフォルト）
+        const soundToPlay = timer.soundUrl || defaultSoundUrl;
+
+        // 対応する音源を再生
+        playSound(soundToPlay, timer.id);
+
         // 通知APIが利用可能であれば通知も表示
         if ("Notification" in window && Notification.permission === "granted") {
             new Notification(`${timer.label || "アラーム"}の時間です！`, {
                 body: `${String(timer.hour).padStart(2, "0")}:${String(timer.minute).padStart(2, "0")}になりました。`,
             });
         }
+    };
+
+    // 音源再生関数
+    const playSound = (soundUrl: string, timerId: string | number) => {
+        const audioKey = `audio-${timerId}`;
+
+        // すでに存在する場合は使い回し、なければ新規作成
+        if (!audioRefs.current[audioKey]) {
+            audioRefs.current[audioKey] = new Audio(soundUrl);
+        } else if (audioRefs.current[audioKey].src !== soundUrl) {
+            // 音源URLが変わっている場合は更新
+            audioRefs.current[audioKey].src = soundUrl;
+        }
+
+        // 音源再生
+        audioRefs.current[audioKey]
+            .play()
+            .then(() => console.log(`アラーム音声再生成功 (ID: ${timerId})`))
+            .catch((err) => {
+                console.error(`オーディオ再生エラー (ID: ${timerId}):`, err);
+                console.error("オーディオのsrc:", audioRefs.current[audioKey]?.src);
+                console.error("オーディオの状態:", audioRefs.current[audioKey]?.readyState);
+            });
     };
 
     // タイマーが実行中の場合にアラームをチェックする
@@ -63,20 +96,6 @@ export default function MultiSoundTimer({
 
                 // 時と分が一致し、秒が0のときにアラーム
                 if (timer.hour === hours && timer.minute === minutes && seconds === 0) {
-                    // サウンド再生を試みる
-                    if (audioRef.current) {
-                        // サウンドを再生し、エラーをキャッチして詳細にログ出力
-                        audioRef.current
-                            .play()
-                            .then(() => console.log("アラーム音声再生成功"))
-                            .catch((err) => {
-                                console.error("オーディオ再生エラー:", err);
-                                // エラーの詳細情報
-                                console.error("オーディオのsrc:", audioRef.current?.src);
-                                console.error("オーディオの状態:", audioRef.current?.readyState);
-                            });
-                    }
-
                     // タイマー発火のハンドラーを呼び出し
                     handleTimerTriggered(timer);
 
@@ -87,7 +106,7 @@ export default function MultiSoundTimer({
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [isRunning, timerSettings, triggeredTimers]);
+    }, [isRunning, timerSettings, triggeredTimers, defaultSoundUrl]);
 
     // タイマーの開始/停止を切り替え
     const toggleTimer = () => {
@@ -120,9 +139,8 @@ export default function MultiSoundTimer({
                                     <div className="timer-info">
                                         <span className="timer-time">{formatTime(timer.hour, timer.minute)}</span>
                                         {timer.label && <span className="timer-label"> {timer.label}</span>}
-                                        {triggeredTimers.has(timer.id) && (
-                                            <span className="timer-triggered"> ✓ 発火済み</span>
-                                        )}
+                                        {timer.soundUrl && <span className="timer-custom-sound"> 🔊</span>}
+                                        {triggeredTimers.has(timer.id) && <span className="timer-triggered"> ✓</span>}
                                     </div>
                                 </li>
                             ))}
@@ -137,12 +155,6 @@ export default function MultiSoundTimer({
                     {isRunning ? "チャイム停止" : "チャイム起動"}
                 </button>
             </div>
-
-            {/* サウンド要素 */}
-            <audio ref={audioRef}>
-                <source src={soundUrl} type="audio/mpeg" />
-                お使いのブラウザはオーディオ要素をサポートしていません。
-            </audio>
 
             {/* ステータス表示 */}
             <p className="timer-status">{isRunning ? "実行中" : "停止中"}</p>
