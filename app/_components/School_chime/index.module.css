@@ -1,5 +1,41 @@
+.sec01 {
+    padding-inline: 0.5rem;
+}
+
+.pageTitle {
+    text-align: center;
+}
+
+.chimeBox h4 {
+    text-align: center;
+}
+
 .chimeContainer {
+    max-width: 1024px;
+    margin-block-end: 5rem;
+    border: 1px solid var(--borderColor);
+    border-radius: 0.5rem;
+    margin-inline: auto;
+    background-color: #ababab;
+}
+
+.chimeContainer h3 {
+    text-align: center;
+    padding-block: 1rem;
+}
+
+.chimeInner {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 3rem;
+    background-color: #eeeeee;
+    border-radius: 0 0 0.5rem 0.5rem;
+    padding-block: 1rem;
+
+    @media (width >= 800px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 1rem;
+    }
 }

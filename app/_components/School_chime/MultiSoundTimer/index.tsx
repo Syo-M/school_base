@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./index.module.css";
 
 // タイマー設定の型定義を拡張して音源情報を追加
@@ -41,26 +41,8 @@ export default function MultiSoundTimer({
         };
     };
 
-    // タイマー発火時のハンドラー
-    const handleTimerTriggered = (timer: TimerSetting) => {
-        console.log(`${timer.label || "アラーム"}の時間です！`);
-
-        // 使用する音源URLの決定（個別設定 or デフォルト）
-        const soundToPlay = timer.soundUrl || defaultSoundUrl;
-
-        // 対応する音源を再生
-        playSound(soundToPlay, timer.id);
-
-        // 通知APIが利用可能であれば通知も表示
-        if ("Notification" in window && Notification.permission === "granted") {
-            new Notification(`${timer.label || "アラーム"}の時間です！`, {
-                body: `${String(timer.hour).padStart(2, "0")}:${String(timer.minute).padStart(2, "0")}になりました。`,
-            });
-        }
-    };
-
-    // 音源再生関数
-    const playSound = (soundUrl: string, timerId: string | number) => {
+    // 音源再生関数 - useCallbackでメモ化
+    const playSound = useCallback((soundUrl: string, timerId: string | number) => {
         const audioKey = `audio-${timerId}`;
 
         // すでに存在する場合は使い回し、なければ新規作成
@@ -80,7 +62,31 @@ export default function MultiSoundTimer({
                 console.error("オーディオのsrc:", audioRefs.current[audioKey]?.src);
                 console.error("オーディオの状態:", audioRefs.current[audioKey]?.readyState);
             });
-    };
+    }, []);
+
+    // タイマー発火時のハンドラー - useCallbackでメモ化
+    const handleTimerTriggered = useCallback(
+        (timer: TimerSetting) => {
+            console.log(`${timer.label || "アラーム"}の時間です！`);
+
+            // 使用する音源URLの決定（個別設定 or デフォルト）
+            const soundToPlay = timer.soundUrl || defaultSoundUrl;
+
+            // 対応する音源を再生
+            playSound(soundToPlay, timer.id);
+
+            // 通知APIが利用可能であれば通知も表示
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(`${timer.label || "アラーム"}の時間です！`, {
+                    body: `${String(timer.hour).padStart(2, "0")}:${String(timer.minute).padStart(
+                        2,
+                        "0"
+                    )}になりました。`,
+                });
+            }
+        },
+        [defaultSoundUrl, playSound]
+    );
 
     // タイマーが実行中の場合にアラームをチェックする
     useEffect(() => {
@@ -106,7 +112,7 @@ export default function MultiSoundTimer({
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [isRunning, timerSettings, triggeredTimers, defaultSoundUrl]);
+    }, [isRunning, timerSettings, triggeredTimers, handleTimerTriggered]);
 
     // タイマーの開始/停止を切り替え
     const toggleTimer = () => {
@@ -139,7 +145,7 @@ export default function MultiSoundTimer({
                                     <div className="timer-info">
                                         <span className="timer-time">{formatTime(timer.hour, timer.minute)}</span>
                                         {timer.label && <span className="timer-label"> {timer.label}</span>}
-                                        {timer.soundUrl && <span className="timer-custom-sound"> 🔊</span>}
+                                        {timer.soundUrl && <span className="timer-custom-sound"> 👋</span>}
                                         {triggeredTimers.has(timer.id) && <span className="timer-triggered"> ✓</span>}
                                     </div>
                                 </li>
@@ -150,14 +156,14 @@ export default function MultiSoundTimer({
             )}
 
             {/* タイマー制御ボタン */}
-            <div className="timer-controls">
+            <div className={styles.timerControls}>
                 <button className={styles.timerButton} onClick={toggleTimer}>
                     {isRunning ? "チャイム停止" : "チャイム起動"}
                 </button>
             </div>
 
-            {/* ステータス表示 */}
-            <p className="timer-status">{isRunning ? "実行中" : "停止中"}</p>
+            {/* ステータス表示 必要なら*/}
+            {/* <p className="timer-status">{isRunning ? "実行中" : "停止中"}</p> */}
         </div>
     );
 }
