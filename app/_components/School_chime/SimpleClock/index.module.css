@@ -1,0 +1,11 @@
+.clockContainer {
+    color: var(--textColorBlack);
+}
+
+.clock span:nth-child(odd) {
+    font-size: 1.75rem;
+}
+
+.clock span:nth-child(even) {
+    font-size: 0.75rem;
+}

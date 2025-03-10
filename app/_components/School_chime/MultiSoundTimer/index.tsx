@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import SimpleClock from "../SimpleClock";
 import styles from "./index.module.css";
 
 // タイマー設定の型定義を拡張して音源情報を追加
@@ -139,18 +140,23 @@ export default function MultiSoundTimer({
                     {timerSettings.length === 0 ? (
                         <p>設定されたアラームはありません</p>
                     ) : (
-                        <ul>
-                            {timerSettings.map((timer) => (
-                                <li key={timer.id} className="timer-item">
-                                    <div className="timer-info">
-                                        <span className="timer-time">{formatTime(timer.hour, timer.minute)}</span>
-                                        {timer.label && <span className="timer-label"> {timer.label}</span>}
-                                        {timer.soundUrl && <span className="timer-custom-sound"> 👋</span>}
-                                        {triggeredTimers.has(timer.id) && <span className="timer-triggered"> ✓</span>}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                        <>
+                            <SimpleClock />
+                            <ul>
+                                {timerSettings.map((timer) => (
+                                    <li key={timer.id} className="timer-item">
+                                        <div className="timer-info">
+                                            <span className="timer-time">{formatTime(timer.hour, timer.minute)}</span>
+                                            {timer.label && <span className="timer-label"> {timer.label}</span>}
+                                            {timer.soundUrl && <span className="timer-custom-sound"> 👋</span>}
+                                            {triggeredTimers.has(timer.id) && (
+                                                <span className="timer-triggered"> ✓</span>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
                     )}
                 </div>
             )}

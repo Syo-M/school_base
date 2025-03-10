@@ -1,6 +1,7 @@
 // Next.jsに対してこのコンポーネントがクライアントサイドで実行されることを指示
 "use client";
 import React, { useState, useEffect } from "react";
+import styles from "./index.module.css";
 
 // 時計を表示するReactコンポーネントを定義
 // React.ReactElementは、このコンポーネントがReact要素を返すことを示す型アノテーション
@@ -40,12 +41,17 @@ export default function SimpleClock(): React.ReactElement {
     return (
         <>
             {/* フラグメント: 余分なDOMノードを作らずに複数要素をグループ化 */}
-            <p>
+            <p className={styles.clockContainer}>
                 {/* HTML5のtimeタグで時刻を表す */}
                 {/* dateTime属性: マシンリーダブルな形式（標準フォーマット） */}
                 {/* 表示テキスト: 人間が読みやすい日本語形式 */}
-                <time dateTime={`${hours}:${minutes}:${seconds}`}>
-                    {hours}時{minutes}分{seconds}秒
+                <time dateTime={`${hours}:${minutes}:${seconds}`} className={styles.clock}>
+                    <span>{hours}</span>
+                    <span>時</span>
+                    <span>{minutes}</span>
+                    <span>分</span>
+                    <span>{seconds}</span>
+                    <span>秒</span>
                 </time>
             </p>
         </>

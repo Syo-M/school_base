@@ -45,6 +45,7 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     transition: all 0.3s linear;
+    margin-block-start: 1rem;
 }
 
 .timerList ul li {
