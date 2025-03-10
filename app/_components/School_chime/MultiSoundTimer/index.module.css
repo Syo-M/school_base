@@ -1,0 +1,44 @@
+.timerContainer {
+    flex-basis: 45%;
+}
+
+.timerButton {
+    background-color: var(--buttonBackground);
+    color: var(--textColorWhite);
+    padding: 0.5rem 2rem;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.timerList {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    border: 1px solid black;
+    padding: 1rem;
+    transition: all 0.3s linear;
+
+    ul {
+        max-width: 360px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        transition: all 0.3s linear;
+
+        li {
+            flex-basis: 45%;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s linear;
+        }
+    }
+}
