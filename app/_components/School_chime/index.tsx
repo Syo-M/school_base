@@ -19,6 +19,7 @@ export default function TimerPage() {
         { id: 10, hour: 15, minute: 40, label: "５限目終わり" },
         { id: 11, hour: 15, minute: 50, label: "６限目開始" },
         { id: 12, hour: 16, minute: 40, label: "６限目終わり" },
+        { id: 12, hour: 17, minute: 6, label: "実験中" },
         // 最大20個まで追加可能
     ];
 
