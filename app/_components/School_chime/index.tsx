@@ -75,6 +75,29 @@ export default function TimerPage() {
         // 最大20個まで追加可能
     ];
 
+    const hiroshima306: TimerSetting[] = [
+        { id: 1, hour: 9, minute: 40, label: "１限目開始" },
+        { id: 2, hour: 10, minute: 30, label: "１限目終わり" },
+        { id: 3, hour: 10, minute: 40, label: "２限目開始" },
+        { id: 4, hour: 11, minute: 30, label: "２限目終わり" },
+        { id: 5, hour: 11, minute: 40, label: "３限目開始" },
+        { id: 6, hour: 12, minute: 30, label: "３限目終わり" },
+        { id: 7, hour: 13, minute: 30, label: "４限目開始" },
+        { id: 8, hour: 14, minute: 20, label: "４限目終わり" },
+        { id: 9, hour: 14, minute: 30, label: "５限目開始" },
+        { id: 10, hour: 15, minute: 20, label: "５限目終わり" },
+        { id: 11, hour: 15, minute: 30, label: "６限目開始" },
+        { id: 12, hour: 16, minute: 20, label: "６限目終わり" },
+        {
+            id: 13,
+            hour: 17,
+            minute: 20,
+            label: "自習終了5分前",
+            soundUrl: "https://github.com/Syo-M/studio02base/raw/main/bgm/hotaru_piano_10.mp3",
+        },
+        // 最大20個まで追加可能
+    ];
+
     return (
         <section className={Styles.sec01}>
             <h2 className={Styles.pageTitle}>チャイム</h2>
@@ -111,6 +134,15 @@ export default function TimerPage() {
                         <h4>広島302教室</h4>
                         <MultiSoundTimer
                             timerSettings={hiroshima302}
+                            defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
+                            autoStart={false}
+                        />
+                    </div>
+
+                    <div className={Styles.chimeBox}>
+                        <h4>広島306教室</h4>
+                        <MultiSoundTimer
+                            timerSettings={hiroshima306}
                             defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
                             autoStart={false}
                         />

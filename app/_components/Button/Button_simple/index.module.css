@@ -1,0 +1,144 @@
+/* index.module.css */
+.button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    border: 1px solid transparent;
+}
+
+/* サイズバリエーション */
+.size-small {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    min-height: 32px;
+}
+
+.size-medium {
+    padding: 8px 16px;
+    font-size: 1rem;
+    min-height: 40px;
+}
+
+.size-large {
+    padding: 10px 20px;
+    font-size: 1.125rem;
+    min-height: 48px;
+}
+
+/* スタイルバリエーション */
+.variant-default {
+    background-color: #f0f0f0;
+    color: #333;
+    border-color: #ddd;
+}
+
+.variant-default:hover:not(.disabled) {
+    background-color: #e4e4e4;
+}
+
+.variant-default.active {
+    background-color: #ddd;
+    color: #333;
+}
+
+.variant-primary {
+    background-color: #1976d2;
+    color: white;
+}
+
+.variant-primary:hover:not(.disabled) {
+    background-color: #1565c0;
+}
+
+.variant-primary.active {
+    background-color: #0d47a1;
+}
+
+.variant-secondary {
+    background-color: #9c27b0;
+    color: white;
+}
+
+.variant-secondary:hover:not(.disabled) {
+    background-color: #7b1fa2;
+}
+
+.variant-secondary.active {
+    background-color: #6a1b9a;
+}
+
+.variant-warning {
+    background-color: #ff9800;
+    color: #fff;
+}
+
+.variant-warning:hover:not(.disabled) {
+    background-color: #f57c00;
+}
+
+.variant-warning.active {
+    background-color: #e65100;
+}
+
+.variant-info {
+    background-color: #00bcd4;
+    color: white;
+}
+
+.variant-info:hover:not(.disabled) {
+    background-color: #00acc1;
+}
+
+.variant-info.active {
+    background-color: #007c91;
+}
+
+/* 無効状態 */
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* 全幅表示 */
+.fullWidth {
+    width: 100%;
+}
+
+/* フォーカス状態 */
+.button:focus-visible {
+    outline: 2px solid rgba(25, 118, 210, 0.5);
+    outline-offset: 2px;
+}
+
+/* アイコン配置 */
+.iconLeft {
+    margin-right: 8px;
+}
+
+.iconRight {
+    margin-left: 8px;
+}
+
+/* シンプルなアクティブ状態アニメーション */
+.active .text {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
