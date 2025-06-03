@@ -131,7 +131,7 @@ export default function TimerPage() {
 
                 <div className={Styles.chimeInner}>
                     <div className={Styles.chimeBox}>
-                        <h4>広島302教室</h4>
+                        <h4>広島302教室(9時30分スタート)</h4>
                         <MultiSoundTimer
                             timerSettings={hiroshima302}
                             defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
@@ -140,7 +140,7 @@ export default function TimerPage() {
                     </div>
 
                     <div className={Styles.chimeBox}>
-                        <h4>広島306教室</h4>
+                        <h4>広島306教室(9時40分スタート)</h4>
                         <MultiSoundTimer
                             timerSettings={hiroshima306}
                             defaultSoundUrl="https://github.com/Syo-M/studio02base/raw/main/bgm/school_Bell.mp3"
